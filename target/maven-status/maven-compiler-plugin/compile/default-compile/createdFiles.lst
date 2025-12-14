@@ -1,0 +1,9 @@
+com/labmanager/labs/entity/EquipmentId.class
+com/labmanager/labs/controller/LabController.class
+com/labmanager/labs/LabsServiceApplication.class
+com/labmanager/labs/repository/LabRepository.class
+com/labmanager/labs/service/LabService.class
+com/labmanager/labs/entity/Equipment.class
+com/labmanager/labs/dto/EquipmentRequest.class
+com/labmanager/labs/entity/Lab.class
+com/labmanager/labs/repository/EquipmentRepository.class
