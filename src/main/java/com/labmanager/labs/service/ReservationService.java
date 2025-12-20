@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import com.labmanager.labs.dto.EquipmentRequest;
 import com.labmanager.labs.entity.Equipment;
-import com.labmanager.labs.entity.EquipmentId;
 import com.labmanager.labs.entity.Lab;
 import com.labmanager.labs.repository.EquipmentRepository;
 import com.labmanager.labs.repository.LabRepository;
@@ -40,10 +39,9 @@ public class ReservationService {
             boolean labOk = true;
             // check for every equitment if it is ok
             for (EquipmentRequest req : equipmentRequest) {
-                EquipmentId id = new EquipmentId(lab.getLabId(), req.getName());
-                Optional<Equipment> eqFound = equipmentRepo.findById(id);
+                Optional<Equipment> eqFound = equipmentRepo.findByLabIdAndName(lab.getLabId(), req.getName());
 
-                if (eqFound.isEmpty()) {labOk = false; break; }; // lab does not have one
+                if (eqFound.isEmpty()) { labOk = false; break; } // lab does not have one
 
                 // lab has it, check stock
                 Equipment equipment = eqFound.get();
@@ -58,20 +56,20 @@ public class ReservationService {
     // for a specified lab, it reserves listed equipment
     public boolean reserve(String labId, List<EquipmentRequest> equipmentRequest){
         for (EquipmentRequest req : equipmentRequest) {
-            EquipmentId id = new EquipmentId(labId, req.getName());
-            Optional<Equipment> eqFound = equipmentRepo.findById(id);
+            Optional<Equipment> eqFound = equipmentRepo.findByLabIdAndName(labId, req.getName());
             Equipment equipment = eqFound.get();
             equipment.setCurrentUsage(equipment.getCurrentUsage() + req.getStock());
+            equipmentRepo.save(equipment);
         }
         return true;
     }
 
     public boolean free(String labId, List<EquipmentRequest> equipmentRequest){
         for (EquipmentRequest req : equipmentRequest) {
-            EquipmentId id = new EquipmentId(labId, req.getName());
-            Optional<Equipment> eqFound = equipmentRepo.findById(id);
+            Optional<Equipment> eqFound = equipmentRepo.findByLabIdAndName(labId, req.getName());
             Equipment equipment = eqFound.get();
             equipment.setCurrentUsage(equipment.getCurrentUsage() - req.getStock());
+            equipmentRepo.save(equipment);
         }
         return true;
     }

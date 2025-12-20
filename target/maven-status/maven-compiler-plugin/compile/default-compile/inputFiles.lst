@@ -7,3 +7,4 @@
 /mnt/c/Users/leakr/3.letnik/prpo/labManager/labs-service/src/main/java/com/labmanager/labs/repository/EquipmentRepository.java
 /mnt/c/Users/leakr/3.letnik/prpo/labManager/labs-service/src/main/java/com/labmanager/labs/repository/LabRepository.java
 /mnt/c/Users/leakr/3.letnik/prpo/labManager/labs-service/src/main/java/com/labmanager/labs/service/LabService.java
+/mnt/c/Users/leakr/3.letnik/prpo/labManager/labs-service/src/main/java/com/labmanager/labs/service/ReservationService.java

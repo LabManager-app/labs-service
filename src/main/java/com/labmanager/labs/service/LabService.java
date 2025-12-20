@@ -6,7 +6,6 @@ import java.util.Optional;
 import com.labmanager.labs.entity.Lab;
 import com.labmanager.labs.dto.EquipmentRequest;
 import com.labmanager.labs.entity.Equipment;
-import com.labmanager.labs.entity.EquipmentId;
 import com.labmanager.labs.repository.EquipmentRepository;
 import com.labmanager.labs.repository.LabRepository;
 
@@ -85,7 +84,7 @@ public class LabService {
             int stock = item.getStock();
 
             // Check if this equipment already exists in this lab
-            Optional<Equipment> inLab = equipmentRepo.findByIdLabIdAndIdName(labId, name);
+            Optional<Equipment> inLab = equipmentRepo.findByLabIdAndName(labId, name);
 
             if (inLab.isPresent()) {
                 Equipment eq = inLab.get();
@@ -108,7 +107,7 @@ public class LabService {
             String name = item.getName();
             int stock = item.getStock();
 
-            Optional<Equipment> inLab = equipmentRepo.findByIdLabIdAndIdName(labId, name);
+            Optional<Equipment> inLab = equipmentRepo.findByLabIdAndName(labId, name);
 
             if (inLab.isPresent()) {
                 Equipment eq = inLab.get();
@@ -116,8 +115,7 @@ public class LabService {
 
                 if(newStock <= 0){
                     // remove equipment from lab
-                    EquipmentId id = new EquipmentId(labId, name);
-                    equipmentRepo.deleteById(id);
+                    equipmentRepo.delete(eq);
                 }else{
                     // just lower stock
                     eq.setStock(newStock);

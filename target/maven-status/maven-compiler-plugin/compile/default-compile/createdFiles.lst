@@ -7,3 +7,4 @@ com/labmanager/labs/entity/Equipment.class
 com/labmanager/labs/dto/EquipmentRequest.class
 com/labmanager/labs/entity/Lab.class
 com/labmanager/labs/repository/EquipmentRepository.class
+com/labmanager/labs/service/ReservationService.class

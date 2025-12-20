@@ -16,16 +16,15 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "equipment")
 public class Equipment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @EmbeddedId
-    private EquipmentId id;
+    @Column(name = "lab_id", nullable = false)
+    private String labId;
 
-    /*
-    @ManyToOne
-    @MapsId("labId")
-    @JoinColumn(name = "lab_id")
-    private Lab lab;
-    */
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @Column(nullable = false)
     private int stock;
@@ -36,13 +35,30 @@ public class Equipment {
     public Equipment() {}
 
     public Equipment(String labId, String name, int stock, int currentUsage) {
-        this.id = new EquipmentId(labId, name);
+        this.labId = labId;
+        this.name = name;
         this.stock = stock;
         this.currentUsage = currentUsage;
     }
 
-    public EquipmentId getId() {
+    public Long getId() {
         return id;
+    }
+
+    public String getLabId() {
+        return labId;
+    }
+
+    public void setLabId(String labId) {
+        this.labId = labId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getStock() {
