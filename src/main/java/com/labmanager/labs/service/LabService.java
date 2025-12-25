@@ -54,18 +54,17 @@ public class LabService {
         if (maybeLab.isEmpty()) return false;   // lab ne obstaja
 
         Lab lab = maybeLab.get();
-        lab.setAvailability(false);
         lab.setOccupactionType(occupactionType);
         return true;
     }
 
+    // sets lab as available
     public boolean freeLab(String labId){
         Optional<Lab> maybeLab = labRepo.findById(labId);
         if (maybeLab.isEmpty()) return false;   // lab ne obstaja
         
         Lab lab = maybeLab.get();
-        lab.setAvailability(true);
-        lab.setOccupactionType(null);
+        lab.setOccupactionType("Available");
         return true;
     }
 

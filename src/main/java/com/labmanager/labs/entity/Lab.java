@@ -21,7 +21,6 @@ public class Lab {
     @Column(name = "location", nullable = false)
     private String location;
 
-    private Boolean availability;
     private String occupactionType;
 
     public Lab() {}
@@ -29,8 +28,7 @@ public class Lab {
     public Lab(String labId, String location) {
         this.labId = labId;
         this.location = location;
-        this.availability = true;
-        this.occupactionType = null;
+        this.occupactionType = "Available";
     }
 
     public String getLabId() {
@@ -43,14 +41,6 @@ public class Lab {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-    
-    public Boolean getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(Boolean availability) {
-        this.availability = availability;
     }
 
     public String getOccupactionType() {

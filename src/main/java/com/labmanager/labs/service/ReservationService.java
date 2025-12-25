@@ -27,10 +27,13 @@ public class ReservationService {
     public List<Lab> checkAvailability(List<EquipmentRequest> equipmentRequest) {
         List<Lab> okLabs = new ArrayList<>();
 
-        // all labs with availability == true
+        // all labs with occupactionType == "Available" (null-safe, case-insensitive)
         List<Lab> allLabs = labRepo.findAll()
             .stream()
-            .filter(l -> l.getAvailability() == true)
+            .filter(l -> {
+                String t = l.getOccupactionType();
+                return t != null && "available".equalsIgnoreCase(t);
+            })
             .collect(Collectors.toList());
 
         if (equipmentRequest == null || equipmentRequest.isEmpty()) return allLabs;

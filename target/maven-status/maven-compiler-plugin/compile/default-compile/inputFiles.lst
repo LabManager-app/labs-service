@@ -1,4 +1,5 @@
 /mnt/c/Users/leakr/3.letnik/prpo/labManager/labs-service/src/main/java/com/labmanager/labs/LabsServiceApplication.java
+/mnt/c/Users/leakr/3.letnik/prpo/labManager/labs-service/src/main/java/com/labmanager/labs/config/CorsConfig.java
 /mnt/c/Users/leakr/3.letnik/prpo/labManager/labs-service/src/main/java/com/labmanager/labs/controller/LabController.java
 /mnt/c/Users/leakr/3.letnik/prpo/labManager/labs-service/src/main/java/com/labmanager/labs/dto/EquipmentRequest.java
 /mnt/c/Users/leakr/3.letnik/prpo/labManager/labs-service/src/main/java/com/labmanager/labs/entity/Equipment.java
