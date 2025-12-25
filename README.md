@@ -6,4 +6,6 @@ prevajanje:
 
 zagon:
 3. cd ..
-4. 
+4. docker compose up --build
+
+docker status: docker ps -a

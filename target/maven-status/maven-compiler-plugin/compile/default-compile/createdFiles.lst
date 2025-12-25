@@ -1,4 +1,3 @@
-com/labmanager/labs/entity/EquipmentId.class
 com/labmanager/labs/controller/LabController.class
 com/labmanager/labs/LabsServiceApplication.class
 com/labmanager/labs/repository/LabRepository.class

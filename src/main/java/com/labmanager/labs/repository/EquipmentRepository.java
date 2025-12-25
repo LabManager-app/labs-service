@@ -7,7 +7,7 @@ import com.labmanager.labs.entity.Equipment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
-    List<Equipment> findAllByIdLabId(String labId);
+    List<Equipment> findAllByLabId(String labId);
     Optional<Equipment> findByLabIdAndName(String labId, String name);  // returns only one
 }
 

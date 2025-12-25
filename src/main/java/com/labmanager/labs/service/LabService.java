@@ -39,7 +39,7 @@ public class LabService {
         if (!labRepo.existsById(labId)) return false;
 
         try {
-            List<Equipment> labEquipment = equipmentRepo.findAllByIdLabId(labId);
+            List<Equipment> labEquipment = equipmentRepo.findAllByLabId(labId);
             equipmentRepo.deleteAll(labEquipment);
             labRepo.deleteById(labId);
             return true;
@@ -72,7 +72,7 @@ public class LabService {
 
     // --- equipment ---
     public List<Equipment> getEquipment(String labId){
-        return equipmentRepo.findAllByIdLabId(labId);
+        return equipmentRepo.findAllByLabId(labId);
     }
 
     // addEquipment: adds a new equipment item to the given lab

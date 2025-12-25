@@ -1,4 +1,4 @@
-package com.labmanager.labs.dto; // or com.labmanager.labs.controller
+package com.labmanager.labs.dto;
 
 public class EquipmentRequest {
     private String name;
