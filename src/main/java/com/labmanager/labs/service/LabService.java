@@ -55,6 +55,7 @@ public class LabService {
 
         Lab lab = maybeLab.get();
         lab.setOccupactionType(occupactionType);
+        labRepo.save(lab);
         return true;
     }
 
@@ -65,6 +66,7 @@ public class LabService {
         
         Lab lab = maybeLab.get();
         lab.setOccupactionType("Available");
+        labRepo.save(lab);
         return true;
     }
 

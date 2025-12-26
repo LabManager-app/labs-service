@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,7 @@ public class LabController {
         this.labService = labService;
     }
 
+    // labs
     @GetMapping({"", "/"})        
     public ResponseEntity<List<Lab>> getLabs() {
         List<Lab> labs = labService.getLabs();
@@ -50,12 +52,30 @@ public class LabController {
         return ResponseEntity.ok(removed);
     }
 
+
+    // ocupation
+    @PatchMapping("/{labId}/occupation")
+    public ResponseEntity<Boolean> setOccupation(
+        @PathVariable String labId,
+        @RequestBody(required = false) Map<String,String> body) {
+
+        if (body != null) {
+            String occ = body.get("occupactionType");
+            boolean ok = labService.occupyLab(labId, occ); // set + save
+            return ok ? ResponseEntity.ok(true) : ResponseEntity.notFound().build();
+        } else {
+            boolean ok = labService.freeLab(labId); // sets "Available" + save
+            return ok ? ResponseEntity.ok(true) : ResponseEntity.notFound().build();
+        }
+    }
+
+
+    // equipment
     @GetMapping("/{labId}/equipment")
     public ResponseEntity<List<Equipment>> getEquipment(@PathVariable("labId") String labId){
         List<Equipment> ok = labService.getEquipment(labId);
         return ResponseEntity.ok(ok);
     }
-
 
     @PostMapping("/{labId}/equipment")
     public ResponseEntity<Boolean> addEquipmentItem(@PathVariable("labId") String labId,
