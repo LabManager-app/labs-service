@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,15 +36,24 @@ public class LabController {
     }
 
     @PostMapping
-    public ResponseEntity<Boolean> addLab(@RequestBody Map<String, String> body) {
-        boolean added = labService.addLab(body.get("labId"), body.get("location"));
-        return ResponseEntity.ok(added);
+    public ResponseEntity<Lab> addLab(@RequestBody Map<String, String> body) {
+        Lab lab = labService.addLab(body.get("labId"), body.get("location"));
+        if (lab == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(lab);
     }
 
     @DeleteMapping
     public ResponseEntity<Boolean> removeLab(@RequestParam("labId") String labId) {
         boolean removed = labService.removeLab(labId);
         return ResponseEntity.ok(removed);
+    }
+
+    @GetMapping("/{labId}/equipment")
+    public ResponseEntity<List<Equipment>> getEquipment(@PathVariable("labId") String labId){
+        List<Equipment> ok = labService.getEquipment(labId);
+        return ResponseEntity.ok(ok);
     }
 
 
@@ -54,12 +64,11 @@ public class LabController {
         return ResponseEntity.ok(ok);
     }
 
-    @GetMapping("/{labId}/equipment")
-    public ResponseEntity<List<Equipment>> getEquipment(@PathVariable("labId") String labId){
-        List<Equipment> ok = labService.getEquipment(labId);
-        return ResponseEntity.ok(ok);
+    @DeleteMapping("/{labId}/equipment/{id}")
+    public ResponseEntity<Boolean> removeEquipment(@PathVariable("id") Long id, @RequestParam("quantity") int quantity) {
+        boolean removed = labService.removeEquipment(id, quantity);
+        return ResponseEntity.ok(removed);
     }
-
 
 }
 

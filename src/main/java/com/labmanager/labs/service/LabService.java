@@ -27,11 +27,11 @@ public class LabService {
         return labRepo.findAll();
     }
 
-    public boolean addLab(String labId, String location) {
-        if (labRepo.existsById(labId)) return false;
+    public Lab addLab(String labId, String location) {
+        if (labRepo.existsById(labId)) return null;
         Lab lab = new Lab(labId, location);
         labRepo.save(lab);
-        return true;
+        return lab;
     }
 
     // deletes the lab and all it's equipment from database
@@ -99,32 +99,25 @@ public class LabService {
     }
     
 
-    // removes equipment
-    public boolean removeEquipment(String labId, List<EquipmentRequest> items) {
+    // removes quantity from equipment identified by its id
+    public boolean removeEquipment(Long id, int quantity) {
+        Optional<Equipment> maybe = equipmentRepo.findById(id);
+        if (maybe.isEmpty()) return false;
 
-        for (EquipmentRequest item : items){
-            String name = item.getName();
-            int stock = item.getStock();
+        Equipment eq = maybe.get();
+        int newStock = eq.getStock() - quantity;
 
-            Optional<Equipment> inLab = equipmentRepo.findByLabIdAndName(labId, name);
-
-            if (inLab.isPresent()) {
-                Equipment eq = inLab.get();
-                int newStock = eq.getStock() - stock;
-
-                if(newStock <= 0){
-                    // remove equipment from lab
-                    equipmentRepo.delete(eq);
-                }else{
-                    // just lower stock
-                    eq.setStock(newStock);
-                    equipmentRepo.save(eq);
-                }
-            } else{
-                return false;
+        try {
+            if (newStock <= 0) {
+                equipmentRepo.deleteById(id);
+            } else {
+                eq.setStock(newStock);
+                equipmentRepo.save(eq);
             }
+            return true;
+        } catch (DataIntegrityViolationException ex) {
+            return false;
         }
-        return true;
     }
 
 
