@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.labmanager.labs.entity.Equipment;
 import com.labmanager.labs.entity.Lab;
 import com.labmanager.labs.service.LabService;
+import com.labmanager.labs.service.ReservationService;
 import com.labmanager.labs.dto.EquipmentRequest;
 
 @RestController
@@ -25,9 +26,11 @@ import com.labmanager.labs.dto.EquipmentRequest;
 public class LabController {
     
     private final LabService labService;
+    private final ReservationService resService;
 
-    public LabController(LabService labService) {
+    public LabController(LabService labService, ReservationService resService) {
         this.labService = labService;
+        this.resService = resService;
     }
 
     // labs
@@ -89,6 +92,21 @@ public class LabController {
         boolean removed = labService.removeEquipment(id, quantity);
         return ResponseEntity.ok(removed);
     }
+
+    @GetMapping("/equipment")
+    public ResponseEntity<List<String>> getEquipmentList(){
+        List<String> eq = labService.getEquipmentList();
+        return ResponseEntity.ok(eq);
+    }
+
+
+    // reservation - accept equipment list in request body and return matching Lab objects
+    @GetMapping("/reservation")
+    public ResponseEntity<List<Lab>> getAvailableLabs(@RequestBody(required = false) List<EquipmentRequest> equipmentRequest){
+        List<Lab> eq = resService.checkAvailability(equipmentRequest);
+        return ResponseEntity.ok(eq);
+    }
+
 
 }
 

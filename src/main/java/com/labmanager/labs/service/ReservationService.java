@@ -23,7 +23,7 @@ public class ReservationService {
         this.equipmentRepo = equipmentRepository;
     }
 
-    // return all labs where every requested item exists and has enough available units
+    // return all Lab objects where every requested item exists and has enough available units
     public List<Lab> checkAvailability(List<EquipmentRequest> equipmentRequest) {
         List<Lab> okLabs = new ArrayList<>();
 
@@ -36,11 +36,13 @@ public class ReservationService {
             })
             .collect(Collectors.toList());
 
-        if (equipmentRequest == null || equipmentRequest.isEmpty()) return allLabs;
+        if (equipmentRequest == null || equipmentRequest.isEmpty()) {
+            return allLabs;
+        }
 
         for (Lab lab : allLabs) {
             boolean labOk = true;
-            // check for every equitment if it is ok
+            // check for every equipment if it is ok
             for (EquipmentRequest req : equipmentRequest) {
                 Optional<Equipment> eqFound = equipmentRepo.findByLabIdAndName(lab.getLabId(), req.getName());
 
@@ -49,9 +51,9 @@ public class ReservationService {
                 // lab has it, check stock
                 Equipment equipment = eqFound.get();
                 int available = equipment.getStock() - equipment.getCurrentUsage();
-                if (available < req.getStock()) {labOk = false; break; }
+                if (available < req.getStock()) { labOk = false; break; }
             }
-            if(labOk) okLabs.add(lab);
+            if (labOk) okLabs.add(lab);
         }
         return okLabs;
     }

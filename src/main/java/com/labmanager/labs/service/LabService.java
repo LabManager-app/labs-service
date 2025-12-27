@@ -2,6 +2,7 @@ package com.labmanager.labs.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.labmanager.labs.entity.Lab;
 import com.labmanager.labs.dto.EquipmentRequest;
@@ -120,6 +121,16 @@ public class LabService {
         } catch (DataIntegrityViolationException ex) {
             return false;
         }
+    }
+
+    // returns all equipment
+    public List<String> getEquipmentList(){
+        List<Equipment> all = equipmentRepo.findAll();
+        return all.stream()
+            .map(Equipment::getName)
+            .filter(name -> name != null && !name.isEmpty())
+            .distinct()
+            .collect(Collectors.toList());
     }
 
 
