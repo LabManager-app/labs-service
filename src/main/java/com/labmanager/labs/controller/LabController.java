@@ -19,7 +19,7 @@ import com.labmanager.labs.entity.Equipment;
 import com.labmanager.labs.entity.Lab;
 import com.labmanager.labs.service.LabService;
 import com.labmanager.labs.service.ReservationService;
-import com.labmanager.labs.dto.EquipmentRequest;
+import com.labmanager.labs.dto.EquipmentRequest; 
 
 @RestController
 @RequestMapping("/labs")
@@ -100,11 +100,20 @@ public class LabController {
     }
 
 
-    // reservation - accept equipment list in request body and return matching Lab objects
+    // reservation
+    // accept equipment list in request body and return matching Lab objects
     @GetMapping("/reservation")
     public ResponseEntity<List<Lab>> getAvailableLabs(@RequestBody(required = false) List<EquipmentRequest> equipmentRequest){
         List<Lab> eq = resService.checkAvailability(equipmentRequest);
         return ResponseEntity.ok(eq);
+    }
+
+    // reserves euipment in equipment request
+    @PostMapping("/{labId}/reservation")
+    public ResponseEntity<Boolean> reserveEquipment(@PathVariable("labId") String labId,
+                                                    @RequestBody List<EquipmentRequest> equipmentRequest){
+        boolean ok = resService.reserve(labId, equipmentRequest);
+        return ResponseEntity.ok(ok);
     }
 
 

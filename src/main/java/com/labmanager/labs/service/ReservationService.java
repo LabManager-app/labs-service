@@ -58,17 +58,27 @@ public class ReservationService {
         return okLabs;
     }
 
-    // for a specified lab, it reserves listed equipment
-    public boolean reserve(String labId, List<EquipmentRequest> equipmentRequest){
+    // for a specified lab, it reserves listed equipment + additional check
+    public Boolean reserve(String labId, List<EquipmentRequest> equipmentRequest){
+        if (labId == null || equipmentRequest == null) return false;
+
         for (EquipmentRequest req : equipmentRequest) {
             Optional<Equipment> eqFound = equipmentRepo.findByLabIdAndName(labId, req.getName());
+            if (eqFound.isEmpty()) {
+                return false; // equipment missing in lab
+            }
             Equipment equipment = eqFound.get();
-            equipment.setCurrentUsage(equipment.getCurrentUsage() + req.getStock());
+            int newUsage = equipment.getCurrentUsage() + req.getStock();
+            if (newUsage > equipment.getStock()) {
+                return false; // not enough available units
+            }
+            equipment.setCurrentUsage(newUsage);
             equipmentRepo.save(equipment);
         }
         return true;
     }
 
+    // TO FIX
     public boolean free(String labId, List<EquipmentRequest> equipmentRequest){
         for (EquipmentRequest req : equipmentRequest) {
             Optional<Equipment> eqFound = equipmentRepo.findByLabIdAndName(labId, req.getName());
