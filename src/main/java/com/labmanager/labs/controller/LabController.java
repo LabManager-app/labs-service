@@ -101,8 +101,8 @@ public class LabController {
 
 
     // reservation
-    // accept equipment list in request body and return matching Lab objects
-    @GetMapping("/reservation")
+    // return labs that have requested equipment available
+    @PostMapping("/reservation")
     public ResponseEntity<List<Lab>> getAvailableLabs(@RequestBody(required = false) List<EquipmentRequest> equipmentRequest){
         List<Lab> eq = resService.checkAvailability(equipmentRequest);
         return ResponseEntity.ok(eq);
@@ -113,6 +113,14 @@ public class LabController {
     public ResponseEntity<Boolean> reserveEquipment(@PathVariable("labId") String labId,
                                                     @RequestBody List<EquipmentRequest> equipmentRequest){
         boolean ok = resService.reserve(labId, equipmentRequest);
+        return ResponseEntity.ok(ok);
+    }
+
+    // free previously reserved equipment for a lab
+    @PostMapping("/{labId}/reservation/free")
+    public ResponseEntity<Boolean> freeReservation(@PathVariable("labId") String labId,
+                                                   @RequestBody List<EquipmentRequest> equipmentRequest){
+        boolean ok = resService.free(labId, equipmentRequest);
         return ResponseEntity.ok(ok);
     }
 
