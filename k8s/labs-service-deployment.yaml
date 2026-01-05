@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: labs-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: labs-service
+  template:
+    metadata:
+      labels:
+        app: labs-service
+    spec:
+      containers:
+        - name: labs-service
+          image: leakr109/labs-service:latest
+          imagePullPolicy: Always   # pulls from my dockerHub
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: labs-service-config
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: labs-db-secret
+                  key: PGUSER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: labs-db-secret
+                  key: PGPASSWORD
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: labs-service-config
+                  key: SPRING_PROFILES_ACTIVE

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: labs-service-config
+data:
+  # Database URL now comes from the external Postgres host declared in the secret
+  # Use the same host/port/database as in `labs-db-secret` (PGHOST/PGPORT/PGDATABASE)
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://lab-manager-dbs.postgres.database.azure.com:5432/labs-db"
+  SPRING_PROFILES_ACTIVE: "default"
