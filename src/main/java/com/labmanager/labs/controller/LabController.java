@@ -52,7 +52,11 @@ public class LabController {
     @DeleteMapping
     public ResponseEntity<Boolean> removeLab(@RequestParam("labId") String labId) {
         boolean removed = labService.removeLab(labId);
-        return ResponseEntity.ok(removed);
+        if (removed) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 
@@ -81,16 +85,22 @@ public class LabController {
     }
 
     @PostMapping("/{labId}/equipment")
-    public ResponseEntity<Boolean> addEquipmentItem(@PathVariable("labId") String labId,
-            @RequestBody List<EquipmentRequest> equipment) {
+    public ResponseEntity<List<Equipment>> addEquipmentItem(@PathVariable("labId") String labId,
+                                                            @RequestBody List<EquipmentRequest> equipment) {
         boolean ok = labService.addEquipment(labId, equipment);
-        return ResponseEntity.ok(ok);
+        if (!ok) {
+            return ResponseEntity.notFound().build();
+        }
+        // return the current equipment list for the lab as the created resource representation
+        List<Equipment> updated = labService.getEquipment(labId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(updated);
     }
 
     @DeleteMapping("/{labId}/equipment/{id}")
-    public ResponseEntity<Boolean> removeEquipment(@PathVariable("id") Long id, @RequestParam("quantity") int quantity) {
+    public ResponseEntity<Void> removeEquipment(@PathVariable("id") Long id, @RequestParam("quantity") int quantity) {
         boolean removed = labService.removeEquipment(id, quantity);
-        return ResponseEntity.ok(removed);
+        if (removed) return ResponseEntity.noContent().build();
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/equipment")
@@ -113,7 +123,11 @@ public class LabController {
     public ResponseEntity<Boolean> reserveEquipment(@PathVariable("labId") String labId,
                                                     @RequestBody List<EquipmentRequest> equipmentRequest){
         boolean ok = resService.reserve(labId, equipmentRequest);
-        return ResponseEntity.ok(ok);
+        if (ok) {
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }
+        // reservation failed (e.g., insufficient equipment or lab not found)
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
     // free previously reserved equipment for a lab
@@ -121,9 +135,9 @@ public class LabController {
     public ResponseEntity<Boolean> freeReservation(@PathVariable("labId") String labId,
                                                    @RequestBody List<EquipmentRequest> equipmentRequest){
         boolean ok = resService.free(labId, equipmentRequest);
-        return ResponseEntity.ok(ok);
+        if (ok) return ResponseEntity.ok().build();
+        return ResponseEntity.notFound().build();
     }
-
 
 }
 
