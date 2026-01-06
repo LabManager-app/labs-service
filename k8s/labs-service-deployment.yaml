@@ -35,7 +35,4 @@ spec:
                   name: labs-db-secret
                   key: PGPASSWORD
             - name: SPRING_PROFILES_ACTIVE
-              valueFrom:
-                configMapKeyRef:
-                  name: labs-service-config
-                  key: SPRING_PROFILES_ACTIVE
+              value: prod
