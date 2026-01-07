@@ -16,8 +16,17 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Checkout parent
+        uses: actions/checkout@v4
+        with:
+          repository: tvoje-ime/labmanager-parent
+          path: parent
+
+      - name: Install parent POM
+        run: mvn -f parent/pom.xml install
+
       - name: Run tests
-        run: mvn test
+        run: mvn -B -ntp test
 
       - name: Build and push
         run: |
