@@ -16,8 +16,8 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Run tests
-        run: mvn test
+      - name: Compile and run tests
+        run: mvn package
 
       - name: Build and push
         run: |

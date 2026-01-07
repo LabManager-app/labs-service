@@ -1,0 +1,10 @@
+# Ignore build artifacts
+target/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Logs
+*.log
